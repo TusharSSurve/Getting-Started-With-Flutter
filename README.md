@@ -7,3 +7,6 @@ A simple To-Do App.
 
 ## 2. BMI Calculator - Normal
 A Simple BMI Calculator
+
+## 3. Weather App
+A simple weather app that gives current weather based on the user's current location.API used:- https://openweathermap.org/api
