@@ -23,7 +23,7 @@ class _WeatherState extends State<Weather> {
   Future getWeather(Position position) async {
     print('Hello');
     http.Response response = await http.get(Uri.parse(
-        "http://api.openweathermap.org/data/2.5/weather?lat=${position.latitude}&lon=${position.longitude}&units=metric&appid=101216bedbd5c6f8cd832513a72fac63"));
+        "http://api.openweathermap.org/data/2.5/weather?lat=${position.latitude}&lon=${position.longitude}&units=metric&appid=${YOUR_API_KEY}"));
 
     var results = jsonDecode(response.body);
 
