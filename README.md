@@ -10,3 +10,6 @@ A Simple BMI Calculator
 
 ## 3. Weather App
 A simple weather app that gives current weather based on the user's current location.API used:- https://openweathermap.org/api
+
+## 4. BMI Calculator - Advance
+Change in GUI than previous one
