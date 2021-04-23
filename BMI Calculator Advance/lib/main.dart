@@ -1,3 +1,5 @@
+import 'package:bmi_calculator_advance/helper_functions.dart';
+import 'package:bmi_calculator_advance/result.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -15,8 +17,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'BMI Calculator',
-      home: Home(),
       debugShowCheckedModeBanner: false,
+      initialRoute: '/',
+      routes: {'/': (context) => Home(), '/result': (context) => Result()},
     );
   }
 }
@@ -31,7 +34,7 @@ class _HomeState extends State<Home> {
   final Color cardHexColor = HexColor('#292929');
   final Color accentHexColor = HexColor('#FCC91C');
   Gender selectedGender;
-  double person_height = 195;
+  int person_height = 195;
   int weight = 60, age = 22;
 
   @override
@@ -88,7 +91,7 @@ class _HomeState extends State<Home> {
                             FaIcon(
                               FontAwesomeIcons.male,
                               size: 90,
-                              color: Colors.blue,
+                              color: Colors.blue.shade400,
                             ),
                             SizedBox(
                               height: gender_height * 0.05,
@@ -127,7 +130,7 @@ class _HomeState extends State<Home> {
                           FaIcon(
                             FontAwesomeIcons.female,
                             size: 90,
-                            color: Colors.pink,
+                            color: Colors.pink.shade400,
                           ),
                           SizedBox(
                             height: gender_height * 0.05,
@@ -162,7 +165,7 @@ class _HomeState extends State<Home> {
                       height: gender_height * 0.04,
                     ),
                     Text(
-                      person_height.toStringAsFixed(0),
+                      person_height.toString(),
                       style: TextStyle(
                           color: accentHexColor,
                           fontSize: 55,
@@ -183,7 +186,7 @@ class _HomeState extends State<Home> {
                           label: person_height.round().toString(),
                           onChanged: (v) {
                             setState(() {
-                              person_height = v;
+                              person_height = v.round();
                             });
                           },
                           min: 100.0,
@@ -206,6 +209,60 @@ class _HomeState extends State<Home> {
                       width: width / 2,
                       height: height * 0.28,
                       child: Card(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              height: gender_height * 0.06,
+                            ),
+                            Text(
+                              'WEIGHT',
+                              style:
+                                  TextStyle(color: Colors.grey, fontSize: 16),
+                            ),
+                            SizedBox(
+                              height: gender_height * 0.04,
+                            ),
+                            Text(
+                              weight.toStringAsFixed(0),
+                              style: TextStyle(
+                                  color: accentHexColor,
+                                  fontSize: 55,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                RaisedButton(
+                                  color: Colors.white70,
+                                  child: Icon(
+                                    Icons.remove,
+                                    size: 40,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      weight -= 1;
+                                    });
+                                  },
+                                  shape: CircleBorder(),
+                                ),
+                                RaisedButton(
+                                  color: Colors.white70,
+                                  child: Icon(
+                                    Icons.add,
+                                    size: 40,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      weight += 1;
+                                    });
+                                  },
+                                  shape: CircleBorder(),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
                         color: cardHexColor,
                         margin: EdgeInsets.fromLTRB(8, 4, 4, 4),
                         shape: RoundedRectangleBorder(
@@ -216,6 +273,60 @@ class _HomeState extends State<Home> {
                       width: width / 2,
                       height: height * 0.28,
                       child: Card(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              height: gender_height * 0.06,
+                            ),
+                            Text(
+                              'AGE',
+                              style:
+                                  TextStyle(color: Colors.grey, fontSize: 16),
+                            ),
+                            SizedBox(
+                              height: gender_height * 0.04,
+                            ),
+                            Text(
+                              age.toStringAsFixed(0),
+                              style: TextStyle(
+                                  color: accentHexColor,
+                                  fontSize: 55,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                RaisedButton(
+                                  color: Colors.white70,
+                                  child: Icon(
+                                    Icons.remove,
+                                    size: 40,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      age -= 1;
+                                    });
+                                  },
+                                  shape: CircleBorder(),
+                                ),
+                                RaisedButton(
+                                  color: Colors.white70,
+                                  child: Icon(
+                                    Icons.add,
+                                    size: 40,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      age += 1;
+                                    });
+                                  },
+                                  shape: CircleBorder(),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
                         color: cardHexColor,
                         margin: EdgeInsets.fromLTRB(4, 4, 8, 4),
                         shape: RoundedRectangleBorder(
@@ -229,7 +340,14 @@ class _HomeState extends State<Home> {
               height: height * 0.1,
               margin: EdgeInsets.fromLTRB(0, 8, 0, 0),
               child: RaisedButton(
-                onPressed: () {},
+                onPressed: () {
+                  List<String> result = getResult(person_height, weight);
+                  Navigator.pushNamed(context, '/result', arguments: {
+                    'BMI': result[0],
+                    'Msg': result[1],
+                    'Desc': result[2]
+                  });
+                },
                 color: accentHexColor,
                 child: Center(
                   child: Text('CALCULATE BMI', style: TextStyle(fontSize: 20)),
