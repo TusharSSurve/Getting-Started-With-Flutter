@@ -6,10 +6,10 @@ Here are some projects & their applications which can be build using Flutter:
 A simple To-Do App.
 
 ## 2. BMI Calculator - Normal
-A Simple BMI Calculator
+Body Mass Index (BMI) is a measure of body fat derived on the basis of an adult man or woman’s height and weight. BMI is a major determinant of one’s obesity or leanness. Moreover, BMI is a reliable and quick way of gauging the health of a person. It is a cost-effective and simple method of screening the categories of weight that may lead to medical problems in the near-future.
 
 ## 3. Weather App
 A simple weather app that gives current weather based on the user's current location.API used:- https://openweathermap.org/api
 
 ## 4. BMI Calculator - Advance
-Change in GUI than previous one
+Body Mass Index (BMI) is a measure of body fat derived on the basis of an adult man or woman’s height and weight. BMI is a major determinant of one’s obesity or leanness. Moreover, BMI is a reliable and quick way of gauging the health of a person. It is a cost-effective and simple method of screening the categories of weight that may lead to medical problems in the near-future.
