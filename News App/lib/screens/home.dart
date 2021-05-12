@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:newsapp/models/article.dart';
 import 'package:newsapp/models/category.dart';
+import 'package:newsapp/widgets/blog_tile.dart';
 import 'package:newsapp/widgets/category_tile.dart';
 import 'package:http/http.dart' as http;
 
@@ -11,7 +14,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   List<Category> categories;
-  List<Article> articles;
+  List<Article> articles = new List<Article>();
+  bool isLoading = true;
   @override
   void initState() {
     categories = [
@@ -30,12 +34,35 @@ class _HomeState extends State<Home> {
       Category("Technology",
           "https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80"),
     ];
+    super.initState();
+    getNews();
   }
 
   Future<void> getNews() async {
     String url =
-        'https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=3b6038187c18427a81c4a8a2a9f9be5a';
-    var response = await http.get(Uri(path: url));
+        'https://newsapi.org/v2/top-headlines?country=in&apiKey=3b6038187c18427a81c4a8a2a9f9be5a';
+    var response = await http.get(Uri.parse(url));
+    var jsonData = jsonDecode(response.body);
+
+    if (jsonData['status'] == 'ok') {
+      (jsonData['articles']).forEach((element) async {
+        var response1 = await http.get(Uri.parse(element['urlToImage']));
+        if (element['urlToImage'] != null &&
+            element['description'] != null &&
+            element != null &&
+            response1.statusCode != 404) {
+          articles.add(Article(
+              title: element['title'],
+              content: element['content'],
+              description: element['description'],
+              url: element['url'],
+              urlToImage: element['urlToImage']));
+        }
+      });
+    }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
@@ -61,26 +88,44 @@ class _HomeState extends State<Home> {
     );
     return Scaffold(
       appBar: appBar,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              height: 70,
-              child: ListView.builder(
-                itemBuilder: (ctx, index) {
-                  return CategoryTile(
-                    imageUrl: categories[index].imageUrl,
-                    categoryName: categories[index].categoryName,
-                  );
-                },
-                itemCount: categories.length,
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
+      body: isLoading
+          ? Center(
+              child: Container(
+              child: CircularProgressIndicator(),
+            ))
+          : SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
+                    height: 70,
+                    child: ListView.builder(
+                      itemBuilder: (ctx, index) {
+                        return CategoryTile(
+                          imageUrl: categories[index].imageUrl,
+                          categoryName: categories[index].categoryName,
+                        );
+                      },
+                      itemCount: categories.length,
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                    ),
+                  ),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.8,
+                    child: ListView.builder(
+                        itemBuilder: (ctx, index) {
+                          return BlogTile(
+                            imageUrl: articles[index].urlToImage,
+                            title: articles[index].title,
+                            desc: articles[index].description,
+                            url: articles[index].url,
+                          );
+                        },
+                        itemCount: articles.length),
+                  )
+                ],
               ),
-            )
-          ],
-        ),
-      ),
+            ),
     );
   }
 }
