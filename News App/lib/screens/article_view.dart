@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:webview_flutter/platform_interface.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class ArticleView extends StatefulWidget {
@@ -18,12 +17,34 @@ class _ArticleViewState extends State<ArticleView> {
       Completer<WebViewController>();
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: WebView(
-          initialUrl: widget.url,
-          onWebViewCreated: (WebViewController webViewController) {
-            _completer.complete(webViewController);
-          }),
+    final appBar = AppBar(
+      elevation: 0,
+      centerTitle: true,
+      title: RichText(
+        text: TextSpan(
+          text: 'News',
+          style: TextStyle(
+              color: Colors.blue, fontSize: 20, fontWeight: FontWeight.bold),
+          children: <TextSpan>[
+            TextSpan(
+                text: 'App',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold)),
+          ],
+        ),
+      ),
+    );
+    return Scaffold(
+      appBar: appBar,
+      body: Container(
+        child: WebView(
+            initialUrl: widget.url,
+            onWebViewCreated: (WebViewController webViewController) {
+              _completer.complete(webViewController);
+            }),
+      ),
     );
   }
 }
