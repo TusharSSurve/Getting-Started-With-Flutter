@@ -16,3 +16,6 @@ Body Mass Index (BMI) is a measure of body fat derived on the basis of an adult 
 
 ## 5. News App
 A News app that presents the latest news from trusted national and international publishers. Read the latest India News, Breaking News from across the world. API used:- https://newsapi.org/
+
+## 6. Shop App
+Simple Shop App with Flutter & FireBase.
