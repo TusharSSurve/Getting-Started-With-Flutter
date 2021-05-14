@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:shop_app/providers/products.dart';
 import 'package:shop_app/screens/product_detailed_screen.dart';
 import 'package:shop_app/screens/products_overview_screen.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      child: MyApp(),
+      create: (ctx) => Products(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
