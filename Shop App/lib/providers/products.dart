@@ -6,8 +6,10 @@ import 'package:shop_app/providers/product.dart';
 import 'package:http/http.dart' as http;
 
 class Products with ChangeNotifier {
-  List<Product> _items = [];
+  final String authToken;
 
+  List<Product> _items = [];
+  Products(this.authToken, this._items);
   List<Product> get items {
     return [..._items];
   }
@@ -21,8 +23,8 @@ class Products with ChangeNotifier {
   }
 
   Future<void> fetchProducts() async {
-    const url =
-        'https://flutter-update-814d1-default-rtdb.firebaseio.com/products.json';
+    final url =
+        'https://flutter-update-814d1-default-rtdb.firebaseio.com/products.json?auth=$authToken';
     try {
       final response = await http.get(Uri.parse(url));
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
