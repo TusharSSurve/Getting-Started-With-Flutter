@@ -20,13 +20,24 @@ void main() {
       ),
       ChangeNotifierProxyProvider<Auth, Products>(
         update: (ctx, auth, previousProducts) => Products(
-            auth.token, previousProducts == null ? [] : previousProducts.items),
+            auth.token,
+            auth.userId,
+            previousProducts == null ? [] : previousProducts.items),
+        create: (context) {
+          final auth = Provider.of<Auth>(context, listen: false);
+          return Products(auth.token, auth.userId, []);
+        },
       ),
       ChangeNotifierProvider(
         create: (ctx) => Cart(),
       ),
-      ChangeNotifierProvider(
-        create: (ctx) => Orders(),
+      ChangeNotifierProxyProvider<Auth, Orders>(
+        update: (ctx, auth, previousOrders) => Orders(
+            auth.token, previousOrders == null ? [] : previousOrders.orders),
+        create: (context) {
+          final auth = Provider.of<Auth>(context, listen: false);
+          return Orders(auth.token, []);
+        },
       ),
     ],
     child: MyApp(),
