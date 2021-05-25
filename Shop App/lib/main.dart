@@ -32,11 +32,11 @@ void main() {
         create: (ctx) => Cart(),
       ),
       ChangeNotifierProxyProvider<Auth, Orders>(
-        update: (ctx, auth, previousOrders) => Orders(
-            auth.token, previousOrders == null ? [] : previousOrders.orders),
+        update: (ctx, auth, previousOrders) => Orders(auth.token,
+            previousOrders == null ? [] : previousOrders.orders, auth.userId),
         create: (context) {
           final auth = Provider.of<Auth>(context, listen: false);
-          return Orders(auth.token, []);
+          return Orders(auth.token, [], auth.userId);
         },
       ),
     ],
@@ -55,19 +55,14 @@ class MyApp extends StatelessWidget {
                   accentColor: Colors.deepOrange,
                   fontFamily: 'Lato'),
               debugShowCheckedModeBanner: false,
-              initialRoute: auth.isAuth
-                  ? ProductOverviewScreen.routeName
-                  : AuthScreen.routeName,
+              home: auth.isAuth ? ProductOverviewScreen() : AuthScreen(),
               routes: {
-                ProductOverviewScreen.routeName: (ctx) =>
-                    ProductOverviewScreen(),
                 ProductDetailedScreen.routeName: (ctx) =>
                     ProductDetailedScreen(),
                 CartScreen.routeName: (ctx) => CartScreen(),
                 OrdersScreen.routeName: (ctx) => OrdersScreen(),
                 UserProductsScreen.routeName: (ctx) => UserProductsScreen(),
                 EditProductScreen.routeName: (ctx) => EditProductScreen(),
-                AuthScreen.routeName: (ctx) => AuthScreen()
               },
             ));
   }
